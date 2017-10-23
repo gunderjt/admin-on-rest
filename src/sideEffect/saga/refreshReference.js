@@ -25,16 +25,8 @@ function* refreshReference({ type, requestPayload, error, meta }) {
         case CRUD_CREATE_SUCCESS:
         case CRUD_UPDATE_SUCCESS:
         case CRUD_DELETE_SUCCESS:
-            if (meta.referenceArgs) {
-                return yield put(crudGetManyReference( 
-                    meta.referenceArgs.reference,
-                    meta.referenceArgs.target,
-                    meta.referenceArgs.recordId,
-                    meta.referenceArgs.relatedTo,
-                    meta.referenceArgs.pagination,
-                    meta.referenceArgs.sort,
-                    meta.referenceArgs.filter
-                ));
+            if (meta.successAction) {
+                return yield put(meta.successAction);
             }
         default:
             return yield all([]);
@@ -43,7 +35,7 @@ function* refreshReference({ type, requestPayload, error, meta }) {
 
 export default function*() {
     yield takeEvery(
-        action => action.meta && action.meta.referenceArgs,
+        action => action.meta && action.meta.successAction,
         refreshReference
     );
 }

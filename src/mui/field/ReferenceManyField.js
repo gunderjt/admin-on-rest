@@ -90,6 +90,20 @@ export class ReferenceManyField extends Component {
 		const { crudGetManyReference } = this.props;
 		const pagination = { page: 1, perPage };
 		const relatedTo = nameRelatedTo(reference, record.id, resource, target);
+		/*
+			Storing the action crudGetManyReference as an object to pass to forms to recall on success save.
+			After a create/update/delete success, recall the action to reload the referenced objects.
+		*/
+		this.getReferenceAction = crudGetManyReferenceAction(
+			reference,
+			target,
+			record.id,
+			relatedTo,
+			pagination,
+			this.state.sort,
+			filter
+		);
+		/* Maybe dispatch previous generated action?;  Keep this for now.*/
 		crudGetManyReference(
 			reference,
 			target,
@@ -111,23 +125,20 @@ export class ReferenceManyField extends Component {
 			basePath,
 			isLoading,
 			record,
-			perPage,
-			filter,
 			target,
 			inlineForm
 		} = this.props;
-		const pagination = { page: 1, perPage };
-		const relatedTo = nameRelatedTo(reference, record.id, resource, target);
+
 		if (React.Children.count(children) !== 1) {
-		    throw new Error(
-		        '<ReferenceManyField> only accepts a single child (like <Datagrid>)'
-		    );
+			throw new Error(
+				'<ReferenceManyField> only accepts a single child (like <Datagrid>)'
+			);
 		}
 		if (typeof ids === 'undefined') {
 			return <LinearProgress style={{ marginTop: '1em' }} />;
 		}
 		const referenceBasePath = basePath.replace(resource, reference); // FIXME obviously very weak
-		const stateSort = this.state.sort;
+
 		return (
 			<div>
 				{React.cloneElement(children, {
@@ -136,22 +147,26 @@ export class ReferenceManyField extends Component {
 					data,
 					isLoading,
 					basePath: referenceBasePath,
-					currentSort: stateSort,
+					currentSort: this.state.sort,
 					setSort: this.setSort,
+					inlineCrudOptions: {
+						reference,
+						target,
+						parentRecord: record,
+						getReferenceAction: this.getReferenceAction,
+					}
 				})}
 				{inlineForm && (
 					<div>
-					  {React.cloneElement(inlineForm, {
-							resource,
-							reference,
-							record: record,
-							relatedTo,
-							target,
-							pagination,
-							sort: stateSort,
-							filter
-					  })}
-				  </div>
+						{React.cloneElement(inlineForm, 
+							{
+								reference,
+								target,
+								parentRecord: record,
+								getReferenceAction: this.getReferenceAction,
+							})
+						}
+					</div>
 				)}
 			</div>
 		)

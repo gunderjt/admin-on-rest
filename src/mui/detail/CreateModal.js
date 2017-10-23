@@ -11,6 +11,7 @@ import FlatButton from 'material-ui/FlatButton';
 import Add from 'material-ui/svg-icons/content/add'
 import { 
 	crudCreateReference as crudCreateReferenceAction,
+  crudUpdateReference as crudUpdateReferenceAction,
 } from '../../actions/dataActions';
 import DefaultActions from './CreateActions';
 import translate from '../../i18n/translate';
@@ -28,29 +29,20 @@ class CreateModal extends Component {
   save = (newRecord, redirect) => {
     const { 
       reference,
-      record,
-      resource,
-      target,
-      perPage,
-      filter,
-      pagination,
-      relatedTo,
-      sort
+      getReferenceAction
     } = this.props;
 
-    this.props.crudCreateReference(
-      this.props.reference,
-      newRecord,
-      {
+    if(newRecord.id) {
+      
+    } else {
+      this.props.crudCreateReference(
         reference,
-        target,
-        recordId: record.id,
-        relatedTo,
-        pagination,
-        sort,
-        filter
-      }
-    );
+        newRecord,
+        getReferenceAction
+      );
+    }
+
+    
     this.closeDialog();
   };
 
@@ -68,16 +60,16 @@ class CreateModal extends Component {
   };
 
   generateRecord = () => {
-    const {record, reference, target, resource} = this.props;
+    const {parentRecord, target} = this.props;
 
     let newRecord = {};
-    newRecord[target] = record.id;
+    newRecord[target] = parentRecord.id;
 
     return newRecord;
   }
 
   render() {
-      const { children, meta, reference, record, basePath, translate } = this.props;
+      const { children, meta, reference, record, basePath, translate, updateRecord } = this.props;
       return (
         <div>
           <Dialog
@@ -88,7 +80,7 @@ class CreateModal extends Component {
           >
             {React.cloneElement(children, {
               resource: reference,
-              record: this.generateRecord(),
+              record: updateRecord ? updateRecord : this.generateRecord(),
               save: this.save,
               redirect: false,
               basePath,
@@ -111,22 +103,17 @@ class CreateModal extends Component {
 CreateModal.propTypes = {
     children: PropTypes.element.isRequired,
     crudCreateReference: PropTypes.func.isRequired,
-    filter: PropTypes.object,
+    getReferenceAction: PropTypes.object.isRequired,
     isLoading: PropTypes.bool.isRequired,
-    record: PropTypes.object.isRequired,
-    reference: PropTypes.string.isRequired,
-    relatedTo: PropTypes.string.isRequired,
-    pagination: PropTypes.shape({
-        page: PropTypes.number.isRequired,
-        perPage: PropTypes.number.isRequired,
-    }),
-    resource: PropTypes.string.isRequired,
-    sort: PropTypes.shape({
-        field: PropTypes.string,
-        order: PropTypes.oneOf(['ASC', 'DESC']),
-    }),
+    parentRecord: PropTypes.object.isRequired, 
     target: PropTypes.string.isRequired,
+    reference: PropTypes.string.isRequired,
     translate: PropTypes.func.isRequired,
+    updateRecord: PropTypes.object,
+};
+
+CreateModal.defaultProps = {
+  updateRecord: null,
 };
 
 function mapStateToProps(state) {
