@@ -3,6 +3,7 @@ import auth from './auth';
 import crudFetch from './crudFetch';
 import crudResponse from './crudResponse';
 import referenceFetch from './referenceFetch';
+import refreshReference from './refreshReference';
 
 /**
  * @param {Object} restClient A REST object with two methods: fetch() and convertResponse()
@@ -14,5 +15,6 @@ export default (restClient, authClient) =>
             crudFetch(restClient)(),
             crudResponse(),
             referenceFetch(),
+            refreshReference(),
         ]);
     };

@@ -47,6 +47,12 @@ export const crudCreate = (resource, data, basePath, redirectTo = 'edit') => ({
     meta: { resource, fetch: CREATE, cancelPrevious: false },
 });
 
+export const crudCreateReference = (resource, data, referenceArgs = {}) => ({
+    type: CRUD_CREATE,
+    payload: { data, basePath: null, redirect: false },
+    meta: { resource, fetch: CREATE, cancelPrevious: false, referenceArgs },
+});
+
 export const CRUD_UPDATE = 'AOR/CRUD_UPDATE';
 export const CRUD_UPDATE_LOADING = 'AOR/CRUD_UPDATE_LOADING';
 export const CRUD_UPDATE_FAILURE = 'AOR/CRUD_UPDATE_FAILURE';
