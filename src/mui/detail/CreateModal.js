@@ -15,7 +15,6 @@ import {
 } from '../../actions/dataActions';
 import DefaultActions from './CreateActions';
 import translate from '../../i18n/translate';
-import withPermissionsFilteredChildren from '../../auth/withPermissionsFilteredChildren';
 
 class CreateModal extends Component {
 
@@ -29,20 +28,16 @@ class CreateModal extends Component {
   save = (newRecord, redirect) => {
     const { 
       reference,
-      getReferenceAction
+      getReferenceAction,
+      crudCreateReference,
     } = this.props;
 
-    if(newRecord.id) {
-      
-    } else {
-      this.props.crudCreateReference(
-        reference,
-        newRecord,
-        getReferenceAction
-      );
-    }
+    crudCreateReference(
+      reference,
+      newRecord,
+      getReferenceAction
+    );
 
-    
     this.closeDialog();
   };
 
@@ -80,7 +75,7 @@ class CreateModal extends Component {
           >
             {React.cloneElement(children, {
               resource: reference,
-              record: updateRecord ? updateRecord : this.generateRecord(),
+              record: this.generateRecord(),
               save: this.save,
               redirect: false,
               basePath,
@@ -109,11 +104,6 @@ CreateModal.propTypes = {
     target: PropTypes.string.isRequired,
     reference: PropTypes.string.isRequired,
     translate: PropTypes.func.isRequired,
-    updateRecord: PropTypes.object,
-};
-
-CreateModal.defaultProps = {
-  updateRecord: null,
 };
 
 function mapStateToProps(state) {

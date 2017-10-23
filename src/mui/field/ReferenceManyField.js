@@ -63,6 +63,7 @@ export class ReferenceManyField extends Component {
 	constructor(props) {
 		super(props);
 		this.state = { sort: props.sort };
+		this.getReferencesAction = null;
 	}
 
 	componentDidMount() {

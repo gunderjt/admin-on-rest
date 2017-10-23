@@ -71,6 +71,18 @@ export const crudUpdate = (
     meta: { resource, fetch: UPDATE, cancelPrevious: false },
 });
 
+export const crudUpdateReference = (
+    resource,
+    id,
+    data,
+    previousData,
+    successAction
+) => ({
+    type: CRUD_UPDATE,
+    payload: { id, data, previousData, basePath: null, redirectTo: false },
+    meta: { resource, fetch: UPDATE, cancelPrevious: false, successAction },
+});
+
 export const CRUD_DELETE = 'AOR/CRUD_DELETE';
 export const CRUD_DELETE_LOADING = 'AOR/CRUD_DELETE_LOADING';
 export const CRUD_DELETE_FAILURE = 'AOR/CRUD_DELETE_FAILURE';
