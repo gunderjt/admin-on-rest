@@ -1,19 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Card } from 'material-ui/Card';
 import compose from 'recompose/compose';
-import inflection from 'inflection';
-import ViewTitle from '../layout/ViewTitle';
-import Title from '../layout/Title';
 import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
+import AddButton from '../button/AddButton'
 import Add from 'material-ui/svg-icons/content/add'
-import { 
+import {
 	crudCreateReference as crudCreateReferenceAction,
-  crudUpdateReference as crudUpdateReferenceAction,
 } from '../../actions/dataActions';
-import DefaultActions from './CreateActions';
 import translate from '../../i18n/translate';
 
 class CreateModal extends Component {
@@ -64,7 +58,7 @@ class CreateModal extends Component {
   }
 
   render() {
-      const { children, meta, reference, record, basePath, translate, updateRecord } = this.props;
+      const { children, meta, reference, record, basePath, translate } = this.props;
       return (
         <div>
           <Dialog
@@ -83,12 +77,9 @@ class CreateModal extends Component {
               redirect: false,
             })}
           </Dialog>
-          <FlatButton 
-            primary
-            label="Add"
-            icon={<Add />}
-            style={{ overflow: 'inherit' }} 
-            onClick={this.openDialog} />
+          <AddButton
+            clickEvent={this.openDialog}
+          />
         </div>
       );
     };

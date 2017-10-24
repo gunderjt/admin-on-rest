@@ -12,6 +12,7 @@ export default {
             add_filter: 'Add filter',
             remove_filter: 'Remove this filter',
             back: 'Go Back',
+            add: 'Add',
         },
         boolean: {
             true: 'Yes',
