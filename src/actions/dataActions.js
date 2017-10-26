@@ -76,7 +76,7 @@ export const crudUpdateReference = (
     id,
     data,
     previousData,
-    successAction
+    successAction = {}
 ) => ({
     type: CRUD_UPDATE,
     payload: { id, data, previousData, basePath: null, redirectTo: false },

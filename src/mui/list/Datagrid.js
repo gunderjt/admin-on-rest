@@ -4,6 +4,7 @@ import muiThemeable from 'material-ui/styles/muiThemeable';
 import { Table, TableHeader, TableRow } from 'material-ui/Table';
 import DatagridHeaderCell from './DatagridHeaderCell';
 import DatagridBody from './DatagridBody';
+import EditInlineRender from '../../util/EditInlineRender'
 
 const defaultStyles = {
     table: {
@@ -75,6 +76,17 @@ class Datagrid extends Component {
         this.props.setSort(event.currentTarget.dataset.sort);
     };
 
+    renderChildren(props) {
+      return React.Children.map(props.children, child => {
+        if (child.type === EditInlineRender)
+          return React.cloneElement(child, {
+            referenceInlineHelper: props.referenceInlineHelper
+          })
+        else
+          return child
+      })
+    }
+
     render() {
         const {
             resource,
@@ -90,7 +102,7 @@ class Datagrid extends Component {
             options,
             headerOptions,
             bodyOptions,
-            rowOptions,
+            rowOptions
         } = this.props;
         return (
             <Table
@@ -141,7 +153,7 @@ class Datagrid extends Component {
                     options={bodyOptions}
                     rowOptions={rowOptions}
                 >
-                    {children}
+                    {this.renderChildren(this.props)}
                 </DatagridBody>
             </Table>
         );
@@ -166,6 +178,7 @@ Datagrid.propTypes = {
     rowStyle: PropTypes.func,
     setSort: PropTypes.func,
     styles: PropTypes.object,
+    referenceInlineHelper: PropTypes.object,
 };
 
 Datagrid.defaultProps = {

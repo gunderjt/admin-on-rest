@@ -12,6 +12,7 @@ import {
 	SORT_ASC,
 	SORT_DESC,
 } from '../../reducer/admin/resource/list/queryReducer';
+import ReferenceInlineHelper from '../../util/ReferenceInlineHelper'
 
 /**
  * Render related records to the current one.
@@ -63,7 +64,7 @@ export class ReferenceManyField extends Component {
 	constructor(props) {
 		super(props);
 		this.state = { sort: props.sort };
-		this.getReferencesAction = null;
+		this.referenceInlineHelper = null;
 	}
 
 	componentDidMount() {
@@ -86,25 +87,12 @@ export class ReferenceManyField extends Component {
 	};
 
 	fetchReferences(
-		{ reference, record, resource, target, perPage, filter } = this.props
+		{ reference, record, resource, target, perPage, filter, createInlineForm, editInlineForm } = this.props
 	) {
 		const { crudGetManyReference } = this.props;
 		const pagination = { page: 1, perPage };
 		const relatedTo = nameRelatedTo(reference, record.id, resource, target);
-		/*
-			Storing the action crudGetManyReference as an object to pass to forms to recall on success save.
-			After a create/update/delete success, recall the action to reload the referenced objects.
-		*/
-		this.getReferenceAction = crudGetManyReferenceAction(
-			reference,
-			target,
-			record.id,
-			relatedTo,
-			pagination,
-			this.state.sort,
-			filter
-		);
-		/* Maybe dispatch previous generated action?;  Keep this for now.*/
+
 		crudGetManyReference(
 			reference,
 			target,
@@ -114,6 +102,20 @@ export class ReferenceManyField extends Component {
 			this.state.sort,
 			filter
 		);
+		
+		if(createInlineForm || editInlineForm) {
+			this.referenceInlineHelper = new ReferenceInlineHelper(
+				reference,
+				target,
+				record,
+				relatedTo,
+				pagination,
+				this.state.sort,
+				filter,
+				createInlineForm,
+				editInlineForm,
+			);
+		}
 	}
 
 	render() {
@@ -126,8 +128,7 @@ export class ReferenceManyField extends Component {
 			basePath,
 			isLoading,
 			record,
-			target,
-			inlineForm
+			target
 		} = this.props;
 
 		if (React.Children.count(children) !== 1) {
@@ -150,25 +151,12 @@ export class ReferenceManyField extends Component {
 					basePath: referenceBasePath,
 					currentSort: this.state.sort,
 					setSort: this.setSort,
-					inlineCrudOptions: {
-						reference,
-						target,
-						parentRecord: record,
-						getReferenceAction: this.getReferenceAction,
-					}
+					referenceInlineHelper: this.referenceInlineHelper,
 				})}
-				{inlineForm && (
-					<div>
-						{React.cloneElement(inlineForm, 
-							{
-								reference,
-								target,
-								parentRecord: record,
-								getReferenceAction: this.getReferenceAction,
-							})
-						}
-					</div>
-				)}
+				{
+					(this.referenceInlineHelper && this.referenceInlineHelper.hasCreate())
+					&& this.referenceInlineHelper.onRenderCreate()
+				}
 			</div>
 		)
 	}
@@ -179,6 +167,8 @@ ReferenceManyField.propTypes = {
 	basePath: PropTypes.string.isRequired,
 	children: PropTypes.element.isRequired,
 	crudGetManyReference: PropTypes.func.isRequired,
+	createInlineForm: PropTypes.element,
+	editInlineForm: PropTypes.element,
 	filter: PropTypes.object,
 	ids: PropTypes.array,
 	label: PropTypes.string,
@@ -227,6 +217,3 @@ ConnectedReferenceManyField.defaultProps = {
 };
 
 export default ConnectedReferenceManyField;
-
-
-

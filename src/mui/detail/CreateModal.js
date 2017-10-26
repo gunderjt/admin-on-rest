@@ -89,8 +89,8 @@ class CreateModal extends Component {
 CreateModal.propTypes = {
     children: PropTypes.element.isRequired,
     crudCreateReference: PropTypes.func.isRequired,
-    getReferenceAction: PropTypes.object.isRequired,
     isLoading: PropTypes.bool.isRequired,
+    getReferenceAction: PropTypes.object.isRequired,
     parentRecord: PropTypes.object.isRequired, 
     target: PropTypes.string.isRequired,
     reference: PropTypes.string.isRequired,

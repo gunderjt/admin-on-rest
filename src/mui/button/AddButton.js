@@ -8,10 +8,9 @@ export class AddButton extends Component {
 	render() {
 		const {
 			label = 'aor.action.add',
-			raised = true,
 			translate,
 			clickEvent
-		} = this.props
+		} = this.props;
 		return (
 			<FlatButton 
 				primary
@@ -26,7 +25,6 @@ export class AddButton extends Component {
 AddButton.propTypes = {
 		clickEvent: PropTypes.func.isRequired,
 		label: PropTypes.string,
-		record: PropTypes.object,
 		translate: PropTypes.func.isRequired,
 };
 
