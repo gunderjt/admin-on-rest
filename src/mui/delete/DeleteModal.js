@@ -1,19 +1,19 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Card, CardText } from 'material-ui/Card';
 import Dialog from 'material-ui/Dialog';
 import compose from 'recompose/compose';
+import RaisedButton from 'material-ui/RaisedButton';
+import ActionCheck from 'material-ui/svg-icons/action/check-circle';
+import AlertError from 'material-ui/svg-icons/alert/error-outline';
 import inflection from 'inflection';
-import ViewTitle from '../layout/ViewTitle';
-import Title from '../layout/Title';
-import EditInlineButton from '../button/EditInlineButton'
+import DeleteInlineButton from '../button/DeleteInlineButton'
 import {
-    crudUpdateReference as crudUpdateReferenceAction,
+    crudDeleteReference as crudDeleteReferenceAction,
 } from '../../actions/dataActions';
 import translate from '../../i18n/translate';
 
-export class EditModal extends Component {
+export class DeleteModal extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -23,11 +23,10 @@ export class EditModal extends Component {
 		this.id = props.record.id;
 	}
 
-	save = (record, redirect) => {
-    this.props.crudUpdateReference(
+	delete = () => {
+    this.props.crudDeleteReference(
       this.props.reference,
       this.id,
-      record,
       this.data,
       this.props.getReferenceAction,
     );
@@ -49,6 +48,19 @@ export class EditModal extends Component {
 
 	render() {
 		const { children, reference, basePath, translate } = this.props;
+    const actions = [
+      <RaisedButton
+        label={translate('aor.action.delete')}
+        icon={<ActionCheck />}
+        primary
+        onClick={this.delete}
+      />,
+      <RaisedButton
+          label={translate('aor.action.cancel')}
+          icon={<AlertError />}
+          onClick={this.closeDialog}
+      />
+    ];
       return (
         <div>
           <Dialog
@@ -56,17 +68,11 @@ export class EditModal extends Component {
             modal={false}
             autoScrollBodyContent
             onRequestClose={this.closeDialog}
+            actions={actions}
           >
-            {React.cloneElement(children, {
-              resource: reference,
-              record: this.data,
-              save: this.save,
-              redirect: false,
-              basePath,
-              translate,
-            })}
+            {translate('aor.message.are_you_sure')}
           </Dialog>
-          <EditInlineButton
+          <DeleteInlineButton
             clickEvent={this.openDialog}
           />
         </div>
@@ -74,9 +80,9 @@ export class EditModal extends Component {
 	}
 }
 
-EditModal.propTypes = {
+DeleteModal.propTypes = {
     children: PropTypes.node,
-    crudUpdateReference: PropTypes.func.isRequired,
+    crudDeleteReference: PropTypes.func.isRequired,
     parentRecord: PropTypes.object.isRequired,
     target: PropTypes.string.isRequired,
     record: PropTypes.object.isRequired,
@@ -91,8 +97,8 @@ function mapStateToProps(state) {
 }
 
 const enhance = compose(
-    connect(mapStateToProps, { crudUpdateReference: crudUpdateReferenceAction }),
+    connect(mapStateToProps, { crudDeleteReference: crudDeleteReferenceAction }),
     translate,
 );
 
-export default enhance(EditModal);
+export default enhance(DeleteModal);

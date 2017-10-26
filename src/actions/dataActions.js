@@ -100,6 +100,17 @@ export const crudDelete = (
     meta: { resource, fetch: DELETE, cancelPrevious: false },
 });
 
+export const crudDeleteReference = (
+    resource,
+    id,
+    previousData,
+    successAction,
+) => ({
+    type: CRUD_DELETE,
+    payload: { id, previousData, basePath: null, redirectTo: false },
+    meta: { resource, fetch: DELETE, cancelPrevious: false, successAction },
+});
+
 export const CRUD_GET_MANY = 'AOR/CRUD_GET_MANY';
 export const CRUD_GET_MANY_LOADING = 'AOR/CRUD_GET_MANY_LOADING';
 export const CRUD_GET_MANY_FAILURE = 'AOR/CRUD_GET_MANY_FAILURE';

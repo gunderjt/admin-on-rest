@@ -10,7 +10,6 @@ export * from './rest';
 export * from './sideEffect/saga';
 export * as fetchUtils from './util/fetch';
 export FieldTitle from './util/FieldTitle';
-export EditInlineRender from './util/EditInlineRender';
 export Admin from './Admin';
 export AdminRoutes from './AdminRoutes';
 export CrudRoute from './CrudRoute';

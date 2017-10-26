@@ -87,7 +87,7 @@ export class ReferenceManyField extends Component {
 	};
 
 	fetchReferences(
-		{ reference, record, resource, target, perPage, filter, createInlineForm, editInlineForm } = this.props
+		{ reference, record, resource, target, perPage, filter, createInlineForm, editInlineForm, deleteInlineForm } = this.props
 	) {
 		const { crudGetManyReference } = this.props;
 		const pagination = { page: 1, perPage };
@@ -114,6 +114,7 @@ export class ReferenceManyField extends Component {
 				filter,
 				createInlineForm,
 				editInlineForm,
+				deleteInlineForm
 			);
 		}
 	}
@@ -169,6 +170,7 @@ ReferenceManyField.propTypes = {
 	crudGetManyReference: PropTypes.func.isRequired,
 	createInlineForm: PropTypes.element,
 	editInlineForm: PropTypes.element,
+	deleteInlineForm: PropTypes.element,
 	filter: PropTypes.object,
 	ids: PropTypes.array,
 	label: PropTypes.string,
