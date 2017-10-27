@@ -15,16 +15,14 @@ const EditInlineButton = ({
         label={label && translate(label)}
         icon={<ContentCreate />}
         style={{ overflow: 'inherit' }}
-        onClick={clickEvent} 
+        onClick={clickEvent}
     />
 );
-
 
 EditInlineButton.propTypes = {
     clickEvent: PropTypes.func.isRequired,
     label: PropTypes.string,
     translate: PropTypes.func.isRequired,
 };
-
 
 export default translate(EditInlineButton);

@@ -104,7 +104,7 @@ export const crudDeleteReference = (
     resource,
     id,
     previousData,
-    successAction,
+    successAction
 ) => ({
     type: CRUD_DELETE,
     payload: { id, previousData, basePath: null, redirectTo: false },

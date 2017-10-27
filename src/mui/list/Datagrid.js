@@ -4,8 +4,8 @@ import muiThemeable from 'material-ui/styles/muiThemeable';
 import { Table, TableHeader, TableRow } from 'material-ui/Table';
 import DatagridHeaderCell from './DatagridHeaderCell';
 import DatagridBody from './DatagridBody';
-import EditInlineRender from '../detail/EditInlineRender'
-import DeleteInlineRender from '../delete/DeleteInlineRender'
+import EditInlineRender from '../detail/EditInlineRender';
+import DeleteInlineRender from '../delete/DeleteInlineRender';
 
 const defaultStyles = {
     table: {
@@ -80,14 +80,15 @@ class Datagrid extends Component {
     renderChildren(children) {
         const { referenceInlineHelper } = this.props;
         return React.Children.map(children, child => {
-            if ((child.type === EditInlineRender) || (child.type === DeleteInlineRender))
+            if (
+                child.type === EditInlineRender ||
+                child.type === DeleteInlineRender
+            )
                 return React.cloneElement(child, {
-                    referenceInlineHelper: referenceInlineHelper
-                })
-            else
-                return child
-            }
-        );
+                    referenceInlineHelper: referenceInlineHelper,
+                });
+            else return child;
+        });
     }
 
     render() {
@@ -105,7 +106,7 @@ class Datagrid extends Component {
             options,
             headerOptions,
             bodyOptions,
-            rowOptions
+            rowOptions,
         } = this.props;
         return (
             <Table
@@ -127,11 +128,11 @@ class Datagrid extends Component {
                                         key={field.props.source || index}
                                         field={field}
                                         defaultStyle={
-                                            index === 0 ? (
-                                                styles.header['th:first-child']
-                                            ) : (
-                                                styles.header.th
-                                            )
+                                            index === 0
+                                                ? styles.header[
+                                                      'th:first-child'
+                                                  ]
+                                                : styles.header.th
                                         }
                                         currentSort={currentSort}
                                         isSorting={

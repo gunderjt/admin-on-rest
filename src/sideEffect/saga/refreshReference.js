@@ -12,7 +12,7 @@ import {
     CRUD_GET_ONE_FAILURE,
     CRUD_UPDATE_FAILURE,
     CRUD_UPDATE_SUCCESS,
-    crudGetManyReference
+    crudGetManyReference,
 } from '../../actions/dataActions';
 
 /**

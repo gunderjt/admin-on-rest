@@ -4,15 +4,15 @@ import { connect } from 'react-redux';
 import LinearProgress from 'material-ui/LinearProgress';
 import { crudGetManyReference as crudGetManyReferenceAction } from '../../actions/dataActions';
 import {
-	getIds,
-	getReferences,
-	nameRelatedTo,
+    getIds,
+    getReferences,
+    nameRelatedTo,
 } from '../../reducer/admin/references/oneToMany';
 import {
-	SORT_ASC,
-	SORT_DESC,
+    SORT_ASC,
+    SORT_DESC,
 } from '../../reducer/admin/resource/list/queryReducer';
-import ReferenceInlineHelper from '../../util/ReferenceInlineHelper'
+import ReferenceInlineHelper from '../../util/ReferenceInlineHelper';
 
 /**
  * Render related records to the current one.
@@ -61,161 +61,170 @@ import ReferenceInlineHelper from '../../util/ReferenceInlineHelper'
  * </ReferenceManyField>
  */
 export class ReferenceManyField extends Component {
-	constructor(props) {
-		super(props);
-		this.state = { sort: props.sort };
-		this.referenceInlineHelper = null;
-	}
+    constructor(props) {
+        super(props);
+        this.state = { sort: props.sort };
+        this.referenceInlineHelper = null;
+    }
 
-	componentDidMount() {
-		this.fetchReferences();
-	}
+    componentDidMount() {
+        this.fetchReferences();
+    }
 
-	componentWillReceiveProps(nextProps) {
-		if (this.props.record.id !== nextProps.record.id) {
-			this.fetchReferences(nextProps);
-		}
-	}
+    componentWillReceiveProps(nextProps) {
+        if (this.props.record.id !== nextProps.record.id) {
+            this.fetchReferences(nextProps);
+        }
+    }
 
-	setSort = field => {
-		const order =
-			this.state.sort.field === field &&
-			this.state.sort.order === SORT_ASC
-				? SORT_DESC
-				: SORT_ASC;
-		this.setState({ sort: { field, order } }, this.fetchReferences);
-	};
+    setSort = field => {
+        const order =
+            this.state.sort.field === field &&
+            this.state.sort.order === SORT_ASC
+                ? SORT_DESC
+                : SORT_ASC;
+        this.setState({ sort: { field, order } }, this.fetchReferences);
+    };
 
-	fetchReferences(
-		{ reference, record, resource, target, perPage, filter, createInlineForm, editInlineForm, deleteInlineForm } = this.props
-	) {
-		const { crudGetManyReference } = this.props;
-		const pagination = { page: 1, perPage };
-		const relatedTo = nameRelatedTo(reference, record.id, resource, target);
+    fetchReferences(
+        {
+            reference,
+            record,
+            resource,
+            target,
+            perPage,
+            filter,
+            createInlineForm,
+            editInlineForm,
+            deleteInlineForm,
+        } = this.props
+    ) {
+        const { crudGetManyReference } = this.props;
+        const pagination = { page: 1, perPage };
+        const relatedTo = nameRelatedTo(reference, record.id, resource, target);
 
-		crudGetManyReference(
-			reference,
-			target,
-			record.id,
-			relatedTo,
-			pagination,
-			this.state.sort,
-			filter
-		);
-		
-		if(createInlineForm || editInlineForm) {
-			this.referenceInlineHelper = new ReferenceInlineHelper(
-				reference,
-				target,
-				record,
-				relatedTo,
-				pagination,
-				this.state.sort,
-				filter,
-				createInlineForm,
-				editInlineForm,
-				deleteInlineForm
-			);
-		}
-	}
+        crudGetManyReference(
+            reference,
+            target,
+            record.id,
+            relatedTo,
+            pagination,
+            this.state.sort,
+            filter
+        );
 
-	render() {
-		const {
-			resource,
-			reference,
-			data,
-			ids,
-			children,
-			basePath,
-			isLoading,
-			record,
-			target
-		} = this.props;
+        if (createInlineForm || editInlineForm) {
+            this.referenceInlineHelper = new ReferenceInlineHelper(
+                reference,
+                target,
+                record,
+                relatedTo,
+                pagination,
+                this.state.sort,
+                filter,
+                createInlineForm,
+                editInlineForm,
+                deleteInlineForm
+            );
+        }
+    }
 
-		if (React.Children.count(children) !== 1) {
-			throw new Error(
-				'<ReferenceManyField> only accepts a single child (like <Datagrid>)'
-			);
-		}
-		if (typeof ids === 'undefined') {
-			return <LinearProgress style={{ marginTop: '1em' }} />;
-		}
-		const referenceBasePath = basePath.replace(resource, reference); // FIXME obviously very weak
+    render() {
+        const {
+            resource,
+            reference,
+            data,
+            ids,
+            children,
+            basePath,
+            isLoading,
+            record,
+            target,
+        } = this.props;
 
-		return (
-			<div>
-				{React.cloneElement(children, {
-					resource: reference,
-					ids,
-					data,
-					isLoading,
-					basePath: referenceBasePath,
-					currentSort: this.state.sort,
-					setSort: this.setSort,
-					referenceInlineHelper: this.referenceInlineHelper,
-				})}
-				{
-					(this.referenceInlineHelper && this.referenceInlineHelper.hasCreate())
-					&& this.referenceInlineHelper.onRenderCreate()
-				}
-			</div>
-		)
-	}
+        if (React.Children.count(children) !== 1) {
+            throw new Error(
+                '<ReferenceManyField> only accepts a single child (like <Datagrid>)'
+            );
+        }
+        if (typeof ids === 'undefined') {
+            return <LinearProgress style={{ marginTop: '1em' }} />;
+        }
+        const referenceBasePath = basePath.replace(resource, reference); // FIXME obviously very weak
+
+        return (
+            <div>
+                {React.cloneElement(children, {
+                    resource: reference,
+                    ids,
+                    data,
+                    isLoading,
+                    basePath: referenceBasePath,
+                    currentSort: this.state.sort,
+                    setSort: this.setSort,
+                    referenceInlineHelper: this.referenceInlineHelper,
+                })}
+                {this.referenceInlineHelper &&
+                    this.referenceInlineHelper.hasCreate() &&
+                    this.referenceInlineHelper.onRenderCreate()}
+            </div>
+        );
+    }
 }
 
 ReferenceManyField.propTypes = {
-	addLabel: PropTypes.bool,
-	basePath: PropTypes.string.isRequired,
-	children: PropTypes.element.isRequired,
-	crudGetManyReference: PropTypes.func.isRequired,
-	createInlineForm: PropTypes.element,
-	editInlineForm: PropTypes.element,
-	deleteInlineForm: PropTypes.element,
-	filter: PropTypes.object,
-	ids: PropTypes.array,
-	label: PropTypes.string,
-	perPage: PropTypes.number,
-	record: PropTypes.object,
-	reference: PropTypes.string.isRequired,
-	data: PropTypes.object,
-	resource: PropTypes.string.isRequired,
-	sort: PropTypes.shape({
-		field: PropTypes.string,
-		order: PropTypes.oneOf(['ASC', 'DESC']),
-	}),
-	source: PropTypes.string.isRequired,
-	target: PropTypes.string.isRequired,
-	isLoading: PropTypes.bool,
+    addLabel: PropTypes.bool,
+    basePath: PropTypes.string.isRequired,
+    children: PropTypes.element.isRequired,
+    crudGetManyReference: PropTypes.func.isRequired,
+    createInlineForm: PropTypes.element,
+    editInlineForm: PropTypes.element,
+    deleteInlineForm: PropTypes.element,
+    filter: PropTypes.object,
+    ids: PropTypes.array,
+    label: PropTypes.string,
+    perPage: PropTypes.number,
+    record: PropTypes.object,
+    reference: PropTypes.string.isRequired,
+    data: PropTypes.object,
+    resource: PropTypes.string.isRequired,
+    sort: PropTypes.shape({
+        field: PropTypes.string,
+        order: PropTypes.oneOf(['ASC', 'DESC']),
+    }),
+    source: PropTypes.string.isRequired,
+    target: PropTypes.string.isRequired,
+    isLoading: PropTypes.bool,
 };
 
 ReferenceManyField.defaultProps = {
-	filter: {},
-	perPage: 25,
-	sort: { field: 'id', order: 'DESC' },
-	source: '',
+    filter: {},
+    perPage: 25,
+    sort: { field: 'id', order: 'DESC' },
+    source: '',
 };
 
 function mapStateToProps(state, props) {
-	const relatedTo = nameRelatedTo(
-		props.reference,
-		props.record.id,
-		props.resource,
-		props.target
-	);
-	return {
-		data: getReferences(state, props.reference, relatedTo),
-		ids: getIds(state, relatedTo),
-		isLoading: state.admin.loading > 0,
-	};
+    const relatedTo = nameRelatedTo(
+        props.reference,
+        props.record.id,
+        props.resource,
+        props.target
+    );
+    return {
+        data: getReferences(state, props.reference, relatedTo),
+        ids: getIds(state, relatedTo),
+        isLoading: state.admin.loading > 0,
+    };
 }
 
 const ConnectedReferenceManyField = connect(mapStateToProps, {
-	crudGetManyReference: crudGetManyReferenceAction,
+    crudGetManyReference: crudGetManyReferenceAction,
 })(ReferenceManyField);
 
 ConnectedReferenceManyField.defaultProps = {
-	addLabel: true,
-	source: '',
+    addLabel: true,
+    source: '',
 };
 
 export default ConnectedReferenceManyField;

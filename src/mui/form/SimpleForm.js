@@ -70,12 +70,12 @@ SimpleForm.defaultProps = {
 };
 
 const enhance = compose(
-  connect((state, props) => ({
-    initialValues: getDefaultValues(state, props),
-    form: props.nested ? 'record-nested-form' : 'record-form',
-    enableReinitialize: true,
-  })),
- 	reduxForm(),
+    connect((state, props) => ({
+        initialValues: getDefaultValues(state, props),
+        form: props.nested ? 'record-nested-form' : 'record-form',
+        enableReinitialize: true,
+    })),
+    reduxForm()
 );
 
 export default enhance(SimpleForm);

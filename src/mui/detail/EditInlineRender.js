@@ -5,13 +5,10 @@ import pure from 'recompose/pure';
 import compose from 'recompose/compose';
 import translate from '../../i18n/translate';
 
-export const EditInlineRender = ({
-    record,
-    referenceInlineHelper
-}) => (
-    (referenceInlineHelper && referenceInlineHelper.hasEdit())
-			&& referenceInlineHelper.onRenderEdit(record)
-);
+export const EditInlineRender = ({ record, referenceInlineHelper }) =>
+    referenceInlineHelper &&
+    referenceInlineHelper.hasEdit() &&
+    referenceInlineHelper.onRenderEdit(record);
 
 EditInlineRender.propTypes = {
     record: PropTypes.object.isRequired,

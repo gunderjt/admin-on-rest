@@ -5,13 +5,10 @@ import pure from 'recompose/pure';
 import compose from 'recompose/compose';
 import translate from '../../i18n/translate';
 
-export const DeleteInlineRender = ({
-    record,
-    referenceInlineHelper
-}) => (
-    (referenceInlineHelper && referenceInlineHelper.hasDelete())
-			&& referenceInlineHelper.onRenderDelete(record)
-);
+export const DeleteInlineRender = ({ record, referenceInlineHelper }) =>
+    referenceInlineHelper &&
+    referenceInlineHelper.hasDelete() &&
+    referenceInlineHelper.onRenderDelete(record);
 
 DeleteInlineRender.propTypes = {
     record: PropTypes.object.isRequired,
