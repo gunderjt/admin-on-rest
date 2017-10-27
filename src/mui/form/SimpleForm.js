@@ -60,21 +60,22 @@ SimpleForm.propTypes = {
     submitOnEnter: PropTypes.bool,
     toolbar: PropTypes.element,
     validate: PropTypes.func,
+    nested: PropTypes.bool,
 };
 
 SimpleForm.defaultProps = {
     submitOnEnter: true,
     toolbar: <Toolbar />,
+    nested: false,
 };
 
 const enhance = compose(
-    connect((state, props) => ({
-        initialValues: getDefaultValues(state, props),
-    })),
-    reduxForm({
-        form: 'record-form',
-        enableReinitialize: true,
-    })
+  connect((state, props) => ({
+    initialValues: getDefaultValues(state, props),
+    form: props.nested ? 'record-nested-form' : 'record-form',
+    enableReinitialize: true,
+  })),
+ 	reduxForm(),
 );
 
 export default enhance(SimpleForm);
