@@ -1,10 +1,11 @@
 import { CRUD_CHANGE_LIST_PARAMS } from '../../../../actions/listActions';
+import { SORT_DESC } from './queryReducer';
 
 const defaultState = {
-    sort: null,
-    order: null,
+    sort: "id",
+    order: SORT_DESC,
     page: 1,
-    perPage: null,
+    perPage: 10,
     filter: {},
 };
 
