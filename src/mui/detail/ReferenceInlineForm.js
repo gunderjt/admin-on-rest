@@ -5,7 +5,7 @@ import pure from 'recompose/pure';
 import compose from 'recompose/compose';
 import translate from '../../i18n/translate';
 
-class EditInlineRender extends Component {
+class ReferenceInlineForm extends Component {
 	render() {
 		const { record, inlineForm, reference } = this.props
 		if(!inlineForm) return (<div></div>);
@@ -23,17 +23,17 @@ class EditInlineRender extends Component {
 }
     
 
-EditInlineRender.propTypes = {
+ReferenceInlineForm.propTypes = {
     record: PropTypes.object.isRequired,
     inlineForm: PropTypes.object.isRequired,
     translate: PropTypes.func.isRequired,
     reference: PropTypes.string.isRequired
 };
 
-EditInlineRender.defaultProps = {
+ReferenceInlineForm.defaultProps = {
     translate: x => x,
 };
 
 const enhance = compose(pure, translate);
 
-export default enhance(EditInlineRender);
+export default enhance(ReferenceInlineForm);
