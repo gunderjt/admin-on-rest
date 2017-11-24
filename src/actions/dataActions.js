@@ -47,10 +47,10 @@ export const crudCreate = (resource, data, basePath, redirectTo = 'edit') => ({
     meta: { resource, fetch: CREATE, cancelPrevious: false },
 });
 
-export const crudCreateReference = (resource, data, successAction = {}) => ({
+export const crudCreateReference = (resource, data) => ({
     type: CRUD_CREATE,
     payload: { data, basePath: null, redirect: false },
-    meta: { resource, fetch: CREATE, cancelPrevious: false, successAction },
+    meta: { resource, fetch: CREATE, cancelPrevious: false, refresh: true },
 });
 
 export const CRUD_UPDATE = 'AOR/CRUD_UPDATE';
@@ -75,12 +75,11 @@ export const crudUpdateReference = (
     resource,
     id,
     data,
-    previousData,
-    successAction = {}
+    previousData
 ) => ({
     type: CRUD_UPDATE,
     payload: { id, data, previousData, basePath: null, redirectTo: false },
-    meta: { resource, fetch: UPDATE, cancelPrevious: false, successAction },
+    meta: { resource, fetch: UPDATE, cancelPrevious: false, refresh: true },
 });
 
 export const CRUD_DELETE = 'AOR/CRUD_DELETE';
@@ -103,12 +102,11 @@ export const crudDelete = (
 export const crudDeleteReference = (
     resource,
     id,
-    previousData,
-    successAction
+    previousData
 ) => ({
     type: CRUD_DELETE,
     payload: { id, previousData, basePath: null, redirectTo: false },
-    meta: { resource, fetch: DELETE, cancelPrevious: false, successAction },
+    meta: { resource, fetch: DELETE, cancelPrevious: false, refresh: true },
 });
 
 export const CRUD_GET_MANY = 'AOR/CRUD_GET_MANY';

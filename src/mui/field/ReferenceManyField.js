@@ -64,7 +64,6 @@ export class ReferenceManyField extends Component {
     constructor(props) {
         super(props);
         this.state = { sort: props.sort };
-        this.referenceInlineHelper = null;
     }
 
     componentDidMount() {
@@ -72,7 +71,9 @@ export class ReferenceManyField extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (this.props.record.id !== nextProps.record.id) {
+        if (this.props.record.id !== nextProps.record.id ||
+            this.props.version !== nextProps.version
+            ) {
             this.fetchReferences(nextProps);
         }
     }
@@ -94,15 +95,11 @@ export class ReferenceManyField extends Component {
             target,
             perPage,
             filter,
-            createInlineForm,
-            editInlineForm,
-            deleteInlineForm,
         } = this.props
     ) {
         const { crudGetManyReference } = this.props;
         const pagination = { page: 1, perPage };
         const relatedTo = nameRelatedTo(reference, record.id, resource, target);
-
         crudGetManyReference(
             reference,
             target,
@@ -112,21 +109,6 @@ export class ReferenceManyField extends Component {
             this.state.sort,
             filter
         );
-
-        if (createInlineForm || editInlineForm) {
-            this.referenceInlineHelper = new ReferenceInlineHelper(
-                reference,
-                target,
-                record,
-                relatedTo,
-                pagination,
-                this.state.sort,
-                filter,
-                createInlineForm,
-                editInlineForm,
-                deleteInlineForm
-            );
-        }
     }
 
     render() {
@@ -140,6 +122,7 @@ export class ReferenceManyField extends Component {
             isLoading,
             record,
             target,
+            createInlineForm,
         } = this.props;
 
         if (React.Children.count(children) !== 1) {
@@ -162,11 +145,14 @@ export class ReferenceManyField extends Component {
                     basePath: referenceBasePath,
                     currentSort: this.state.sort,
                     setSort: this.setSort,
-                    referenceInlineHelper: this.referenceInlineHelper,
                 })}
-                {this.referenceInlineHelper &&
-                    this.referenceInlineHelper.hasCreate() &&
-                    this.referenceInlineHelper.onRenderCreate()}
+                {createInlineForm &&
+                    React.cloneElement(createInlineForm, {
+                    reference,
+                    target,
+                    parentRecord: record,
+                    isLoading
+                })}
             </div>
         );
     }
@@ -178,8 +164,6 @@ ReferenceManyField.propTypes = {
     children: PropTypes.element.isRequired,
     crudGetManyReference: PropTypes.func.isRequired,
     createInlineForm: PropTypes.element,
-    editInlineForm: PropTypes.element,
-    deleteInlineForm: PropTypes.element,
     filter: PropTypes.object,
     ids: PropTypes.array,
     label: PropTypes.string,
@@ -195,6 +179,7 @@ ReferenceManyField.propTypes = {
     source: PropTypes.string.isRequired,
     target: PropTypes.string.isRequired,
     isLoading: PropTypes.bool,
+    version: PropTypes.number.isRequired,
 };
 
 ReferenceManyField.defaultProps = {
@@ -215,6 +200,7 @@ function mapStateToProps(state, props) {
         data: getReferences(state, props.reference, relatedTo),
         ids: getIds(state, relatedTo),
         isLoading: state.admin.loading > 0,
+        version: state.admin.ui.viewVersion,
     };
 }
 

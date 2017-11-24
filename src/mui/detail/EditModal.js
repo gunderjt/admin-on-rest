@@ -26,8 +26,7 @@ export class EditModal extends Component {
             this.props.reference,
             this.id,
             record,
-            this.data,
-            this.props.getReferenceAction
+            this.data
         );
         this.closeDialog();
     };
@@ -73,11 +72,9 @@ export class EditModal extends Component {
 EditModal.propTypes = {
     children: PropTypes.node,
     crudUpdateReference: PropTypes.func.isRequired,
-    parentRecord: PropTypes.object.isRequired,
-    target: PropTypes.string.isRequired,
     record: PropTypes.object.isRequired,
     reference: PropTypes.string.isRequired,
-    getReferenceAction: PropTypes.object.isRequired,
+    isLoading: PropTypes.bool.isRequired,
 };
 
 function mapStateToProps(state) {

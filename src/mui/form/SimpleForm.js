@@ -66,13 +66,12 @@ SimpleForm.propTypes = {
 SimpleForm.defaultProps = {
     submitOnEnter: true,
     toolbar: <Toolbar />,
-    formKey: 'record-form',
 };
 
 const enhance = compose(
     connect((state, props) => ({
         initialValues: getDefaultValues(state, props),
-        form: props.formKey,
+        form: props.formKey || "record-form",
         enableReinitialize: true,
     })),
     reduxForm()

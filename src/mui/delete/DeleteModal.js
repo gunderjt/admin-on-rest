@@ -25,8 +25,7 @@ export class DeleteModal extends Component {
         this.props.crudDeleteReference(
             this.props.reference,
             this.id,
-            this.data,
-            this.props.getReferenceAction
+            this.data
         );
         this.closeDialog();
     };
@@ -79,11 +78,8 @@ export class DeleteModal extends Component {
 DeleteModal.propTypes = {
     children: PropTypes.node,
     crudDeleteReference: PropTypes.func.isRequired,
-    parentRecord: PropTypes.object.isRequired,
-    target: PropTypes.string.isRequired,
     record: PropTypes.object.isRequired,
-    reference: PropTypes.string.isRequired,
-    getReferenceAction: PropTypes.object.isRequired,
+    reference: PropTypes.string.isRequired
 };
 
 function mapStateToProps(state) {

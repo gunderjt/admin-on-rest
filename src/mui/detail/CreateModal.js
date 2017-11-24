@@ -17,14 +17,7 @@ class CreateModal extends Component {
     }
 
     save = (newRecord, redirect) => {
-        const {
-            reference,
-            getReferenceAction,
-            crudCreateReference,
-        } = this.props;
-
-        crudCreateReference(reference, newRecord, getReferenceAction);
-
+        this.props.crudCreateReference(this.props.reference, newRecord);
         this.closeDialog();
     };
 
@@ -87,7 +80,6 @@ CreateModal.propTypes = {
     children: PropTypes.element.isRequired,
     crudCreateReference: PropTypes.func.isRequired,
     isLoading: PropTypes.bool.isRequired,
-    getReferenceAction: PropTypes.object.isRequired,
     parentRecord: PropTypes.object.isRequired,
     target: PropTypes.string.isRequired,
     reference: PropTypes.string.isRequired,
