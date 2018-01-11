@@ -77,20 +77,6 @@ class Datagrid extends Component {
         this.props.setSort(event.currentTarget.dataset.sort);
     };
 
-    renderChildren(children) {
-        const { referenceInlineHelper } = this.props;
-        return React.Children.map(children, child => {
-            if (
-                child.type === EditInlineRender ||
-                child.type === DeleteInlineRender
-            )
-                return React.cloneElement(child, {
-                    referenceInlineHelper: referenceInlineHelper,
-                });
-            else return child;
-        });
-    }
-
     render() {
         const {
             resource,
@@ -157,7 +143,7 @@ class Datagrid extends Component {
                     options={bodyOptions}
                     rowOptions={rowOptions}
                 >
-                    {this.renderChildren(children)}
+                    {children}
                 </DatagridBody>
             </Table>
         );
@@ -181,8 +167,7 @@ Datagrid.propTypes = {
     rowOptions: PropTypes.object,
     rowStyle: PropTypes.func,
     setSort: PropTypes.func,
-    styles: PropTypes.object,
-    referenceInlineHelper: PropTypes.object,
+    styles: PropTypes.object
 };
 
 Datagrid.defaultProps = {

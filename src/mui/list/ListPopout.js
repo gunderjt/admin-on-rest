@@ -154,7 +154,8 @@ export class ListPopout extends Component {
             this.props.resource,
             pagination,
             { field: sort, order },
-            { ...filter, ...permanentFilter }
+            { ...filter, ...permanentFilter },
+            false
         );
     }
 
