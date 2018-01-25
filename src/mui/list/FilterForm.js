@@ -8,6 +8,7 @@ import compose from 'recompose/compose';
 import withProps from 'recompose/withProps';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import autoprefixer from 'material-ui/utils/autoprefixer';
+import { connect } from 'react-redux';
 
 import translate from '../../i18n/translate';
 import defaultTheme from '../defaultTheme';
@@ -106,6 +107,7 @@ FilterForm.propTypes = {
     initialValues: PropTypes.object,
     translate: PropTypes.func.isRequired,
     theme: PropTypes.object.isRequired,
+    formKey: PropTypes.string,
 };
 
 FilterForm.defaultProps = {
@@ -138,8 +140,10 @@ export const mergeInitialValuesWithDefaultValues = ({
 const enhance = compose(
     translate,
     withProps(mergeInitialValuesWithDefaultValues),
+    connect((state, props) => ({
+        form: props.formKey || 'filterForm'
+    })),
     reduxForm({
-        form: 'filterForm',
         enableReinitialize: true,
         onChange: (values, dispatch, props) => props.setFilters(values),
     })

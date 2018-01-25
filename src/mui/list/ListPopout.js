@@ -95,9 +95,7 @@ export class ListPopout extends Component {
             nextProps.params.filter !== this.props.params.filter
         ) {
             this.updateData(
-                Object.keys(nextProps.query).length > 0
-                    ? nextProps.query
-                    : nextProps.params
+                nextProps.params
             );
         }
         if (nextProps.version !== this.props.version) {
@@ -118,7 +116,7 @@ export class ListPopout extends Component {
     }
 
     getBasePath() {
-        return this.props.location.pathname;
+        return "";
     }
 
     /**
@@ -128,10 +126,7 @@ export class ListPopout extends Component {
      *   - the props passed to the List component
      */
     getQuery() {
-        const query =
-            Object.keys(this.props.query).length > 0
-                ? this.props.query
-                : { ...this.props.params };
+        const query = { ...this.props.params };
         if (!query.sort) {
             query.sort = this.props.sort.field;
             query.order = this.props.sort.order;
@@ -343,7 +338,7 @@ ListPopout.defaultProps = {
 function mapStateToProps(state, props) {
     const resourceState = state.admin.resources[props.resource];
     return {
-    		query: {},
+    	query: {},
         params: resourceState.list.params,
         ids: resourceState.list.ids,
         total: resourceState.list.total,

@@ -61,6 +61,7 @@ export class Filter extends Component {
             displayedFilters,
             filterValues,
             theme,
+            formKey,
         } = this.props;
         return (
             <FilterForm
@@ -71,6 +72,7 @@ export class Filter extends Component {
                 initialValues={filterValues}
                 setFilters={this.setFilters}
                 theme={theme}
+                formKey={formKey}
             />
         );
     }
@@ -93,6 +95,7 @@ Filter.propTypes = {
     showFilter: PropTypes.func,
     resource: PropTypes.string.isRequired,
     theme: PropTypes.object,
+    formKey: PropTypes.string,
 };
 
 Filter.defaultProps = {

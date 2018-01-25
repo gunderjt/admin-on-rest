@@ -4,8 +4,6 @@ import muiThemeable from 'material-ui/styles/muiThemeable';
 import { Table, TableHeader, TableRow } from 'material-ui/Table';
 import DatagridHeaderCell from './DatagridHeaderCell';
 import DatagridBody from './DatagridBody';
-import EditInlineRender from '../detail/EditInlineRender';
-import DeleteInlineRender from '../delete/DeleteInlineRender';
 
 const defaultStyles = {
     table: {
